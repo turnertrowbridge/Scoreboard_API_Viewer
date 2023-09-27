@@ -47,6 +47,7 @@ def load_score():
     cur_state["batter"] = data["batter"]
     cur_state["pitcher"] = data["pitcher"]
     cur_state["pitch_count"] = data["pitch_count"]
+    cur_state["count"] = data["count"]
     cur_state["on_base"] = data["on_base"]
     cur_state["last-play"] = data["last-play"]
 
