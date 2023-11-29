@@ -22,7 +22,7 @@ class Uno:
         self.event = event
 
     def send_data(self, data):
-        self.arduino.write(data.encode())
+        self.arduino.write((data + '\n').encode())
 
     def close_connection(self):
         self.arduino.close()
