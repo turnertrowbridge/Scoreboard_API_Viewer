@@ -6,7 +6,6 @@ import time
 import requests
 from time import sleep
 from arduino_connector import Uno
-import arduino_connector
 
 api_url = "https://w1fyv4m4j3.execute-api.us-west-2.amazonaws.com/prod/"
 
@@ -142,25 +141,12 @@ def display_state(stdscr):
 
 # Define the Arduino-related operations in a separate function
 def arduino_operations():
-    arduino = Uno('/dev/cu.usbmodem11401', 9600)
+    arduino = Uno('/dev/cu.usbmodem1401', 9600)
     time.sleep(2)
 
-
-    # teams = arduino_connector.api_team_get(cur_state)
-    # arduino.set_teams(teams[0], teams[1])
-    #
     while True:
         load_score()
-        cur_json = json.dumps(cur_state)
         arduino.send_data(json.dumps(cur_state))
-    #     # Perform Arduino operations here
-    #     inning_half = cur_state['inning-half']
-    #     inning_number = str(cur_state['inning'])
-    #     symbol = "^" if inning_half == "top" else "v"
-    #     inning = symbol + inning_number
-    #
-    #     arduino.update_lcd(cur_state['away-score'], cur_state['home-score'], cur_state["count"][0],
-    #                        cur_state["count"][1], inning)
         time.sleep(3)
 
 
@@ -179,7 +165,4 @@ def main(stdscr):
 
 
 if __name__ == "__main__":
-    # curses.wrapper(main)
-    arduino_thread = threading.Thread(target=arduino_operations)
-    # arduino_thread.daemon = True  # Set as daemon thread to stop when main thread exits
-    arduino_thread.start()
+    curses.wrapper(main)
