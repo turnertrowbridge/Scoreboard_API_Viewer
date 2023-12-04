@@ -51,7 +51,7 @@ def load_score():
     cur_state["outs"] = data["outs"]
     cur_state["batter"] = data["batter"]
     cur_state["pitcher"] = data["pitcher"]
-    cur_state["pitch_count"] = data["pitch_count"]
+    # cur_state["pitch_count"] = data["pitch_count"]
     cur_state["count"] = data["count"]
     cur_state["on_base"] = data["on_base"]
     cur_state["last-play"] = data["last-play"]
@@ -140,23 +140,23 @@ def display_state(stdscr):
 
 
 # Define the Arduino-related operations in a separate function
-def arduino_operations():
-    arduino = Uno('/dev/cu.usbmodem1401', 9600)
-    time.sleep(2)
-
-    while True:
-        load_score()
-        arduino.send_data(json.dumps(cur_state))
-        time.sleep(3)
+# def arduino_operations():
+#     arduino = Uno('/dev/cu.usbmodem1401', 9600)
+#     time.sleep(2)
+#
+#     while True:
+#         load_score()
+#         arduino.send_data(json.dumps(cur_state))
+#         time.sleep(3)
 
 
 def main(stdscr):
     curses.curs_set(0)
 
     # Start Arduino operations in a separate thread
-    arduino_thread = threading.Thread(target=arduino_operations)
-    arduino_thread.daemon = True  # Set as daemon thread to stop when main thread exits
-    arduino_thread.start()
+    # arduino_thread = threading.Thread(target=arduino_operations)
+    # arduino_thread.daemon = True  # Set as daemon thread to stop when main thread exits
+    # arduino_thread.start()
 
     while True:
         load_score()
