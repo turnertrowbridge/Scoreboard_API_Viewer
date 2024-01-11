@@ -1,13 +1,11 @@
 import curses
-import json
-import threading
-import time
 
 import requests
 from time import sleep
-from arduino_connector import Uno
 
-api_url = "https://w1fyv4m4j3.execute-api.us-west-2.amazonaws.com/prod/"
+import config
+
+api_url = config.api_key
 
 cur_state = {
     "away-team": "Dodgers",
@@ -25,6 +23,7 @@ cur_state = {
     "last-play": "",
 }
 
+
 def call_get_request():
     try:
         # make a GET request to the API
@@ -40,6 +39,7 @@ def call_get_request():
     except requests.exceptions.RequestException as e:
         print(f"Request error: {e}")
 
+
 def load_score():
     data = call_get_request()
     cur_state["away-team"] = data["away-team"]
@@ -51,10 +51,11 @@ def load_score():
     cur_state["outs"] = data["outs"]
     cur_state["batter"] = data["batter"]
     cur_state["pitcher"] = data["pitcher"]
-    # cur_state["pitch_count"] = data["pitch_count"]
+    cur_state["pitch_count"] = data["pitch_count"]
     cur_state["count"] = data["count"]
     cur_state["on_base"] = data["on_base"]
     cur_state["last-play"] = data["last-play"]
+
 
 def show_bases():
     on_base = "◆"
@@ -68,6 +69,7 @@ def show_bases():
 
     return bases
 
+
 def show_inning():
     inning = cur_state["inning"]
     inning_half = cur_state["inning-half"]
@@ -76,6 +78,7 @@ def show_inning():
     else:
         inning_half = "▼"
     return f"{inning_half} {inning}"
+
 
 def display_state(stdscr):
     stdscr.clear()
@@ -139,24 +142,8 @@ def display_state(stdscr):
     sleep(1)  # Sleep for 1 second (you can adjust this as needed)
 
 
-# Define the Arduino-related operations in a separate function
-# def arduino_operations():
-#     arduino = Uno('/dev/cu.usbmodem1401', 9600)
-#     time.sleep(2)
-#
-#     while True:
-#         load_score()
-#         arduino.send_data(json.dumps(cur_state))
-#         time.sleep(3)
-
-
 def main(stdscr):
     curses.curs_set(0)
-
-    # Start Arduino operations in a separate thread
-    # arduino_thread = threading.Thread(target=arduino_operations)
-    # arduino_thread.daemon = True  # Set as daemon thread to stop when main thread exits
-    # arduino_thread.start()
 
     while True:
         load_score()
